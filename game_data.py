@@ -2,7 +2,7 @@
 COMP 163 - Project 3: Quest Chronicles
 Game Data Module - Starter Code
 
-Name: [Your Name Here]
+Name: Maya White
 
 AI Usage: [Document any AI assistance used]
 
@@ -10,6 +10,9 @@ This module handles loading and validating game data from text files.
 """
 
 import os
+
+from pygments.lexers.jsonnet import jsonnet_function_token
+
 from custom_exceptions import (
     InvalidDataFormatError,
     MissingDataFileError,
@@ -41,7 +44,21 @@ def load_quests(filename="data/quests.txt"):
     # - FileNotFoundError → raise MissingDataFileError
     # - Invalid format → raise InvalidDataFormatError
     # - Corrupted/unreadable data → raise CorruptedDataError
-    pass
+    try:
+        with open(filename, "r") as f:
+            for line in f:
+                clean_lines = line.strip()
+                split_lines = clean_lines.split(":")
+                if clean_lines == f"{split_lines[0]}:{split_lines[1]}":
+                    continue
+                else:
+                    raise InvalidDataFormatError
+    except FileNotFoundError:
+        print("MissingDataFileError")
+    except CorruptedDataError:
+        print("File is corrupted and can not be used")
+    except InvalidDataFormatError:
+        print("File not in right format")
 
 def load_items(filename="data/items.txt"):
     """
@@ -60,7 +77,23 @@ def load_items(filename="data/items.txt"):
     """
     # TODO: Implement this function
     # Must handle same exceptions as load_quests
-    pass
+    try:
+        with open(filename, "r") as f:
+            for line in f:
+                clean_lines = line.strip()
+                split_lines = clean_lines.split(":")
+                if clean_lines == f"{split_lines[0]}:{split_lines[1]}":
+                    continue
+                else:
+                    raise InvalidDataFormatError
+        return
+    except FileNotFoundError:
+        print("MissingDataFileError")
+    except CorruptedDataError:
+        print("File is corrupted and can not be used")
+    except InvalidDataFormatError:
+        print("File not in right format")
+
 
 def validate_quest_data(quest_dict):
     """
@@ -75,7 +108,15 @@ def validate_quest_data(quest_dict):
     # TODO: Implement validation
     # Check that all required keys exist
     # Check that numeric values are actually numbers
-    pass
+    count = 0
+    for key in quest_dict.keys():
+        if key == quest_dict.keys()[count]:
+            count += 1
+            continue
+        else:
+            raise InvalidDataFormatError
+    return True
+
 
 def validate_item_data(item_dict):
     """
@@ -88,7 +129,14 @@ def validate_item_data(item_dict):
     Raises: InvalidDataFormatError if missing required fields or invalid type
     """
     # TODO: Implement validation
-    pass
+    count = 0
+    for key in item_dict.keys():
+        if key == item_dict.keys()[count]:
+            count += 1
+            continue
+        else:
+            raise InvalidDataFormatError
+    return True
 
 def create_default_data_files():
     """
@@ -99,7 +147,11 @@ def create_default_data_files():
     # Create data/ directory if it doesn't exist
     # Create default quests.txt and items.txt files
     # Handle any file permission errors appropriately
-    pass
+    try:
+        quest_file = open("data/quests.txt", "w")
+        item_file = open("data/items.txt", "w")
+    except:
+        print("Failed to create default data files")
 
 # ============================================================================
 # HELPER FUNCTIONS
@@ -119,7 +171,12 @@ def parse_quest_block(lines):
     # Split each line on ": " to get key-value pairs
     # Convert numeric strings to integers
     # Handle parsing errors gracefully
-    pass
+    quest_dictionary = {}
+    for line in lines:
+        cleaned_line = line.strip()
+        line_split = cleaned_line.split(":")
+        quest_dictionary[line_split[0]] = line_split[1]
+
 
 def parse_item_block(lines):
     """
@@ -132,7 +189,11 @@ def parse_item_block(lines):
     Raises: InvalidDataFormatError if parsing fails
     """
     # TODO: Implement parsing logic
-    pass
+    item_dictionary = {}
+    for line in lines:
+        cleaned_line = line.strip()
+        line_split = cleaned_line.split(":")
+        item_dictionary[line_split[0]] = line_split[1]
 
 # ============================================================================
 # TESTING
@@ -142,23 +203,23 @@ if __name__ == "__main__":
     print("=== GAME DATA MODULE TEST ===")
     
     # Test creating default files
-    # create_default_data_files()
+#    create_default_data_files()
     
     # Test loading quests
-    # try:
-    #     quests = load_quests()
-    #     print(f"Loaded {len(quests)} quests")
-    # except MissingDataFileError:
-    #     print("Quest file not found")
-    # except InvalidDataFormatError as e:
-    #     print(f"Invalid quest format: {e}")
+    #try:
+    #  quests = load_quests()
+      #   print(f"Loaded {len(quests)} quests")
+   # except MissingDataFileError:
+       #  print("Quest file not found")
+    #except InvalidDataFormatError as e:
+       #  print(f"Invalid quest format: {e}")
     
     # Test loading items
-    # try:
-    #     items = load_items()
-    #     print(f"Loaded {len(items)} items")
-    # except MissingDataFileError:
-    #     print("Item file not found")
-    # except InvalidDataFormatError as e:
-    #     print(f"Invalid item format: {e}")
+    #try:
+     #    items = load_items()
+      #   print(f"Loaded {len(items)} items")
+    #except MissingDataFileError:
+     #    print("Item file not found")
+    #except InvalidDataFormatError as e:
+      #   print(f"Invalid item format: {e}")
 
