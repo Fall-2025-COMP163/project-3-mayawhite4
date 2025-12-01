@@ -242,7 +242,12 @@ def sell_item(character, item_id, item_data):
     # Calculate sell price (cost // 2)
     # Remove item from inventory
     # Add gold to character
-    pass
+    if character[item_id] == character[item_id].keys():
+        price = character[item_data] // 2
+        del charatcer[item_id]
+        character["gold"] = characer["gold"] + price
+    else:
+        raise ItemNotFoundError
 
 # ============================================================================
 # HELPER FUNCTIONS
@@ -261,7 +266,11 @@ def parse_item_effect(effect_string):
     # TODO: Implement effect parsing
     # Split on ":"
     # Convert value to integer
-    pass
+    clean_string = effect_string.strip()
+    split_string = clean_string.split(":")
+    item1 = split_string[0]
+    item2 = split_string[1]
+    return (item1, item2)
 
 def apply_stat_effect(character, stat_name, value):
     """
@@ -274,7 +283,16 @@ def apply_stat_effect(character, stat_name, value):
     # TODO: Implement stat application
     # Add value to character[stat_name]
     # If stat is health, ensure it doesn't exceed max_health
-    pass
+    if stat_name == "health":
+        character["health"] = character["health"] + value
+        if character["health"] > character["max_health"]:
+            character["health"] = character["max_health"]
+    elif stat_name == "magic":
+        character["magic"] = character["magic"] + value
+    elif stat_name == "strength":
+        character["strength"] = character["strength"] + value
+    elif stat_name == "max_health":
+        character["max_health"] = character["max_health"] + value
 
 def display_inventory(character, item_data_dict):
     """
