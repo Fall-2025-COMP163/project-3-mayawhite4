@@ -78,7 +78,6 @@ def save_character(character, save_directory="data/save_games"):
     # Lists should be saved as comma-separated values
     try:
         file = open(os.path.join(save_directory, character), "w")
-        if
     except IOError:
         print("ERROR ERROR")
     #Come back please the the this line
@@ -151,7 +150,6 @@ def delete_character(character_name, save_directory="data/save_games"):
     file = character_name
     full_file = os.path.join(save_directory, file)
     if file.os.exists:
-        try:
             os.remove(full_file)
             return True
     else:
