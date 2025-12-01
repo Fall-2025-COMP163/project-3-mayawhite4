@@ -48,7 +48,12 @@ def main_menu():
     # Get user input
     # Validate input (1-3)
     # Return choice
-    pass
+    print(f"=== WELCOME! ===")
+    print(f"1. New Game")
+    print(f"2. Load Game")
+    print(f"3. Exit")
+    user_input = int(input("Enter your selection: "))
+    return user_input
 
 def new_game():
     """
@@ -124,7 +129,15 @@ def game_menu():
     Returns: Integer choice (1-6)
     """
     # TODO: Implement game menu
-    pass
+    print(f"~~~ GAME MENU ~~~")
+    print(f"1. View Character Stats")
+    print(f"2. View Inventory")
+    print(f"3. Quest Menu")
+    print(f"4. Explore (Find Battles)")
+    print(f"5. Shop")
+    print(f"6. Save and Quit")
+    user_input = int(input("What do you want to do: "))
+    return user_input
 
 # ============================================================================
 # GAME ACTIONS
@@ -199,7 +212,10 @@ def save_game():
     # TODO: Implement save
     # Use character_manager.save_character()
     # Handle any file I/O exceptions
-    pass
+    try:
+        character_manager.save_character()
+    except IOError:
+        print("Can't save file")
 
 def load_game_data():
     """Load all quest and item data from files"""

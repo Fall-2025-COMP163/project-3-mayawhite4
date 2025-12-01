@@ -2,7 +2,7 @@
 COMP 163 - Project 3: Quest Chronicles
 Quest Handler Module - Starter Code
 
-Name: [Your Name Here]
+Name: Maya White
 
 AI Usage: [Document any AI assistance used]
 
@@ -87,7 +87,11 @@ def abandon_quest(character, quest_id):
     Raises: QuestNotActiveError if quest not active
     """
     # TODO: Implement quest abandonment
-    pass
+    if quest_id in character["active_quests"]:
+        removal = character["active_quests"].pop(quest_id)
+        return removal
+    else:
+        raise QuestNotActiveError
 
 def get_active_quests(character, quest_data_dict):
     """
@@ -98,7 +102,12 @@ def get_active_quests(character, quest_data_dict):
     # TODO: Implement active quest retrieval
     # Look up each quest_id in character['active_quests']
     # Return list of full quest data dictionaries
-    pass
+    current_quests = []
+    for quest in quest_data_dict:
+        if quest == character["active_quests"]:
+            current_quests.append(quest)
+    return current_quests
+
 
 def get_completed_quests(character, quest_data_dict):
     """
@@ -107,7 +116,11 @@ def get_completed_quests(character, quest_data_dict):
     Returns: List of quest dictionaries for completed quests
     """
     # TODO: Implement completed quest retrieval
-    pass
+    finished_quests = []
+    for quest in quest_data_dict:
+        if quest == character["completed_quests"]:
+            finished_quests.append(quest)
+    return finished_quests
 
 def get_available_quests(character, quest_data_dict):
     """
@@ -132,7 +145,10 @@ def is_quest_completed(character, quest_id):
     Returns: True if completed, False otherwise
     """
     # TODO: Implement completion check
-    pass
+    if quest_id in character["completed_quests"]:
+        return True
+    else:
+        return False
 
 def is_quest_active(character, quest_id):
     """
@@ -141,7 +157,10 @@ def is_quest_active(character, quest_id):
     Returns: True if active, False otherwise
     """
     # TODO: Implement active check
-    pass
+    if quest_id in character["active_quests"]:
+        return True
+    else:
+        return False
 
 def can_accept_quest(character, quest_id, quest_data_dict):
     """
@@ -227,7 +246,7 @@ def display_quest_list(quest_list):
     Shows: Title, Required Level, Rewards
     """
     # TODO: Implement quest list display
-    pass
+    print(f"Title: {quest_list[0]} | Required Lebel: {quest_list[1]} | Rewards: {quest_list[2]}")
 
 def display_character_quest_progress(character, quest_data_dict):
     """

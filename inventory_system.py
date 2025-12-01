@@ -2,12 +2,13 @@
 COMP 163 - Project 3: Quest Chronicles
 Inventory System Module - Starter Code
 
-Name: [Your Name Here]
+Name: Maya White
 
 AI Usage: [Document any AI assistance used]
 
 This module handles inventory management, item usage, and equipment.
 """
+from charset_normalizer.cd import characters_popularity_compare
 
 from custom_exceptions import (
     InventoryFullError,
@@ -37,7 +38,10 @@ def add_item_to_inventory(character, item_id):
     # TODO: Implement adding items
     # Check if inventory is full (>= MAX_INVENTORY_SIZE)
     # Add item_id to character['inventory'] list
-    pass
+    if len(character["inventory"]) >= MAX_INVENTORY_SIZE:
+        raise InventoryFullError
+    else:
+        character["inventory"].append(item_id)
 
 def remove_item_from_inventory(character, item_id):
     """
@@ -53,7 +57,10 @@ def remove_item_from_inventory(character, item_id):
     # TODO: Implement item removal
     # Check if item exists in inventory
     # Remove item from list
-    pass
+    if item_id in character["inventory"]:
+        character["inventory"].remove(item_id)
+    else:
+        raise ItemNotFoundError
 
 def has_item(character, item_id):
     """
@@ -62,7 +69,10 @@ def has_item(character, item_id):
     Returns: True if item in inventory, False otherwise
     """
     # TODO: Implement item check
-    pass
+    if item_id in character["inventory"]:
+        return True
+    else:
+        return False
 
 def count_item(character, item_id):
     """
@@ -72,7 +82,8 @@ def count_item(character, item_id):
     """
     # TODO: Implement item counting
     # Use list.count() method
-    pass
+    amount = character["inventory"].count(item_id)
+    return amount
 
 def get_inventory_space_remaining(character):
     """
@@ -81,7 +92,9 @@ def get_inventory_space_remaining(character):
     Returns: Integer representing available slots
     """
     # TODO: Implement space calculation
-    pass
+    inventory_amount = len(character["inventory"])
+    space_left = MAX_INVENTORY_SIZE - inventory_amount
+    return space_left
 
 def clear_inventory(character):
     """
@@ -92,7 +105,12 @@ def clear_inventory(character):
     # TODO: Implement inventory clearing
     # Save current inventory before clearing
     # Clear character's inventory list
-    pass
+    removed_items = []
+    for items in range(len(character["inventory"])):
+        removed_items.append(character["inventory"][items])
+        character["inventory"].pop(items)
+    return removed_items
+
 
 # ============================================================================
 # ITEM USAGE
@@ -122,7 +140,28 @@ def use_item(character, item_id, item_data):
     # Parse effect (format: "stat_name:value" e.g., "health:20")
     # Apply effect to character
     # Remove item from inventory
-    pass
+    if item_id in character["inventory"]:
+        if "consumable" in character[item_data]:
+            cleaned_line = character[item_data].strip()
+            split_lines = cleaned_line.split(":")
+            if split_lines[0] == "health":
+                bonus = int(split_lines[1])
+                character["health"] = character["health"] + bonus
+                print(f"You have used {character["inventory"][item_id]} a health boost.")
+            if split_lines[0] == "strength":
+                bonus = int(split_lines[1])
+                character["strength"] = character["strength"] + bonus
+                print(f"You have used {character["inventory"][item_id]} a strength boost.")
+            if split_lines[0] == "magic":
+                bonus = int(split_lines[1])
+                character["magic"] = character["magic"] + bonus
+                print(f"You have used {character["inventory"][item_id]} a magic boost.")
+            character["inventory"].pop(item_id)
+
+        else:
+            raise InvalidItemTypeError
+    else:
+        raise ItemNotFoundError
 
 def equip_weapon(character, item_id, item_data):
     """
@@ -244,8 +283,8 @@ def sell_item(character, item_id, item_data):
     # Add gold to character
     if character[item_id] == character[item_id].keys():
         price = character[item_data] // 2
-        del charatcer[item_id]
-        character["gold"] = characer["gold"] + price
+        del character[item_id]
+        character["gold"] = character["gold"] + price
     else:
         raise ItemNotFoundError
 
