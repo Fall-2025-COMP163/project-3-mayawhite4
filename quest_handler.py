@@ -240,7 +240,11 @@ def display_character_quest_progress(character, quest_data_dict):
     - Total rewards earned
     """
     # TODO: Implement progress display
-    pass
+    print(f"{character["name"]}")
+    print(f"Active quests: {character["active_quests"]}")
+    print(f"Completed quests: {character["completed_quests"]}")
+    print(f"Completion percentage: {character["completion_total"]}")
+    print(f"Total rewards earned: {character["total_rewards_earned"]}")
 
 # ============================================================================
 # VALIDATION
