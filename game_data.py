@@ -45,7 +45,7 @@ def load_quests(filename="data/quests.txt"):
     # - Invalid format → raise InvalidDataFormatError
     # - Corrupted/unreadable data → raise CorruptedDataError
     if os.path.exists(filename):
-        if os.path.isfile(full_file):
+        if os.path.isfile(filename):
             with open(filename, "r") as f:
                 for line in f:
                     clean_lines = line.strip()

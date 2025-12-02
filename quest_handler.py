@@ -52,13 +52,13 @@ def accept_quest(character, quest_id, quest_data_dict):
     # Add to character['active_quests']
     if quest_id in quest_data_dict:
         if character["level"] >= quest_data_dict[quest_id]["required_level"]:
-            if quest_data_dict[quest_id]["prerequisites"] == "NONE":
+            if quest_data_dict[quest_id]["prerequisite"] == "NONE":
                 if quest_data_dict[quest_id]["name"] not in character["quest_completed"]:
                     if quest_data_dict[quest_id]["name"] not in character["active_quests"]:
                         character["active_quests"].append(quest_data_dict[quest_id])
                 else:
                     raise QuestAlreadyCompletedError
-            elif quest_data_dict[quest_id]["prerequisites"] in character["quest_completed"]:
+            elif quest_data_dict[quest_id]["prerequisite"] in character["quest_completed"]:
                 if quest_data_dict[quest_id]["name"] not in character["quest_completed"]:
                     if quest_data_dict[quest_id]["name"] not in character["active_quests"]:
                         character["active_quests"].append(quest_data_dict[quest_id])
@@ -166,7 +166,7 @@ def get_available_quests(character, quest_data_dict):
     can_do_quest = []
     for quests in quest_data_dict:
         if character["level"] >= quests["level"]:
-            if quests["prerequisites"] in character["completed_quests"]:
+            if quests["prerequisite"] in character["completed_quests"]:
                 if (quests not in character["completed_quests"]) and (quests not in character["active_quests"]):
                     can_do_quest.append(quests)
     return can_do_quest
@@ -211,7 +211,7 @@ def can_accept_quest(character, quest_id, quest_data_dict):
     # Check all requirements without raising exceptions
     quest_dict = quest_data_dict[quest_id]
     if character["level"] >= quest_dict["level"]:
-        if quest_dict["prerequisites"] in character["completed_quests"]:
+        if quest_dict["prerequisite"] in character["completed_quests"]:
             if (quest_dict not in character["completed_quests"]) and (quest_dict not in character["active_quests"]):
                 return True
     else:
@@ -231,8 +231,8 @@ def get_quest_prerequisite_chain(quest_id, quest_data_dict):
     # Follow prerequisite links backwards
     # Build list in reverse order
     quest_prerequisites = []
-    for quest in range(len(quest_data_dict[quest_id]["prerequisites"])):
-        quest_prerequisites.append(quest_data_dict[quest_id]["prerequisites"][-1])
+    for quest in range(len(quest_data_dict[quest_id]["prerequisite"])):
+        quest_prerequisites.append(quest_data_dict[quest_id]["prerequisite"][-1])
     return quest_prerequisites
 
 # ============================================================================
@@ -342,7 +342,7 @@ def validate_quest_prerequisites(quest_data_dict):
     # Check each quest's prerequisite
     # Ensure prerequisite exists in quest_data_dict
     for quest in quest_data_dict:
-        for prerequisites in quest_data_dict[quest]["prerequisites"]:
+        for prerequisites in quest_data_dict[quest]["prerequisite"]:
             if prerequisites == "NONE":
                 continue
             elif prerequisites in quest_data_dict:
