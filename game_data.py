@@ -176,6 +176,7 @@ def parse_quest_block(lines):
         cleaned_line = line.strip()
         line_split = cleaned_line.split(":")
         quest_dictionary[line_split[0]] = line_split[1]
+        #Figure out how to return the dictionary
 
 
 def parse_item_block(lines):
@@ -194,6 +195,8 @@ def parse_item_block(lines):
         cleaned_line = line.strip()
         line_split = cleaned_line.split(":")
         item_dictionary[line_split[0]] = line_split[1]
+        #How to raise an error here
+    return item_dictionary
 
 # ============================================================================
 # TESTING

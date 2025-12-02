@@ -9,7 +9,7 @@ AI Usage: [Document any AI assistance used]
 This module handles inventory management, item usage, and equipment.
 """
 from charset_normalizer.cd import characters_popularity_compare
-
+#Do I need to keep this ^
 from custom_exceptions import (
     InventoryFullError,
     ItemNotFoundError,
@@ -42,6 +42,7 @@ def add_item_to_inventory(character, item_id):
         raise InventoryFullError
     else:
         character["inventory"].append(item_id)
+        return True
 
 def remove_item_from_inventory(character, item_id):
     """
@@ -59,6 +60,7 @@ def remove_item_from_inventory(character, item_id):
     # Remove item from list
     if item_id in character["inventory"]:
         character["inventory"].remove(item_id)
+        return True
     else:
         raise ItemNotFoundError
 
@@ -157,7 +159,6 @@ def use_item(character, item_id, item_data):
                 character["magic"] = character["magic"] + bonus
                 print(f"You have used {character["inventory"][item_id]} a magic boost.")
             character["inventory"].pop(item_id)
-
         else:
             raise InvalidItemTypeError
     else:
@@ -189,7 +190,34 @@ def equip_weapon(character, item_id, item_data):
     # Parse effect and apply to character stats
     # Store equipped_weapon in character dictionary
     # Remove item from inventory
-    pass
+    if item_id in character["inventory"]:
+        if "weapon" in item_data:
+            if character["equipped_weapon"] == " ":
+                character["equipped_weapon"] = item_id
+            else:
+                character["equipped_weapon"] == " "
+                character["equipped_weapon"] == item_id
+            for bonus in item_data:
+                cleaned_line = item_data[bonus].strip()
+                split_lines = cleaned_line.split(":")
+                if split_lines[0] == "strength":
+                    perk = int(split_lines[1])
+                    character["strength"] = character["strength"] + perk
+                if split_lines[0] == "magic":
+                    perk = int(split_lines[1])
+                    character["magic"] = character["magic"] + perk
+                if split_lines[0] == "health":
+                    perk = int(split_lines[1])
+                    character["health"] = character["health"] + perk
+                if split_lines[0] == "max_health":
+                    perk = int(split_lines[1])
+                    character["max_health"] = character["max_health"] + perk
+            print(f"The weapon you are now equipped with is {item_id}")
+            character["inventory"].pop(item_id)
+        else:
+            raise InvalidItemTypeError
+    else:
+        raise ItemNotFoundError
 
 def equip_armor(character, item_id, item_data):
     """
@@ -213,7 +241,34 @@ def equip_armor(character, item_id, item_data):
     """
     # TODO: Implement armor equipping
     # Similar to equip_weapon but for armor
-    pass
+    if item_id in character["inventory"]:
+        if "armor" in item_data:
+            if character["equipped_armor"] == " ":
+                character["equipped_armor"] = item_id
+            else:
+                character["equipped_armor"] == " "
+                character["equipped_armor"] == item_id
+            for bonus in item_data:
+                cleaned_line = item_data[bonus].strip()
+                split_lines = cleaned_line.split(":")
+                if split_lines[0] == "strength":
+                    perk = int(split_lines[1])
+                    character["strength"] = character["strength"] + perk
+                if split_lines[0] == "magic":
+                    perk = int(split_lines[1])
+                    character["magic"] = character["magic"] + perk
+                if split_lines[0] == "health":
+                    perk = int(split_lines[1])
+                    character["health"] = character["health"] + perk
+                if split_lines[0] == "max_health":
+                    perk = int(split_lines[1])
+                    character["max_health"] = character["max_health"] + perk
+            print(f"The armor you are now equipped with is {item_id}")
+            character["inventory"].pop(item_id)
+        else:
+            raise InvalidItemTypeError
+    else:
+        raise ItemNotFoundError
 
 def unequip_weapon(character):
     """
@@ -227,7 +282,17 @@ def unequip_weapon(character):
     # Remove stat bonuses
     # Add weapon back to inventory
     # Clear equipped_weapon from character
-    pass
+    if character["equipped_weapon"] == " ":
+        return None
+    else:
+        if len(character["inventory"]) >= MAX_INVENTORY_SIZE:
+            raise InventoryFullError
+        else:
+            weapon = character["equipped_weapon"]
+            character["inventory"].append(character["equipped_weapon"])
+            character["equipped_weapon"] = " "
+
+            return weapon
 
 def unequip_armor(character):
     """

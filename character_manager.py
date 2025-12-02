@@ -45,9 +45,63 @@ def create_character(name, character_class):
     # All characters start with:
     # - level=1, experience=0, gold=100
     # - inventory=[], active_quests=[], completed_quests=[]
-    
+    character = {}
     # Raise InvalidCharacterClassError if class not in valid list
-    pass
+    if (character_class == "Warrior"):
+        character["name"] = name
+        character["class"] = character_class
+        character["level"] = 1
+        character["health"] = 150
+        character["max_health"] = 200
+        character["strength"] = 20
+        character["magic"] = 5
+        character["experience"] = 0
+        character["gold"] = 100
+        character["inventory"] = []
+        character["active_quests"] = []
+        character["completed_quests"] = []
+    elif (character_class == "Mage"):
+        character["name"] = name
+        character["class"] = character_class
+        character["level"] = 1
+        character["health"] = 100
+        character["max_health"] = 150
+        character["strength"] = 5
+        character["magic"] = 20
+        character["experience"] = 0
+        character["gold"] = 100
+        character["inventory"] = []
+        character["active_quests"] = []
+        character["completed_quests"] = []
+    elif (character_class == "Rogue"):
+        character["name"] = name
+        character["class"] = character_class
+        character["level"] = 1
+        character["health"] = 130
+        character["max_health"] = 180
+        character["strength"] = 10
+        character["magic"] = 10
+        character["experience"] = 0
+        character["gold"] = 100
+        character["inventory"] = []
+        character["active_quests"] = []
+        character["completed_quests"] = []
+    elif (character_class == "Cleric"):
+        character["name"] = name
+        character["class"] = character_class
+        character["level"] = 1
+        character["health"] = 100
+        character["max_health"] = 180
+        character["strength"] = 5
+        character["magic"] = 15
+        character["experience"] = 0
+        character["gold"] = 100
+        character["inventory"] = []
+        character["active_quests"] = []
+        character["completed_quests"] = []
+    else:
+        raise InvalidCharacterClassError
+
 
 def save_character(character, save_directory="data/save_games"):
     """
@@ -77,9 +131,11 @@ def save_character(character, save_directory="data/save_games"):
     # Handle any file I/O errors appropriately
     # Lists should be saved as comma-separated values
     try:
-        file = open(os.path.join(save_directory, character), "w")
+        open(os.path.join(save_directory, character), "w")
     except IOError:
         print("ERROR ERROR")
+    except PermissionError:
+        print("No permission")
     #Come back please the the this line
 
 
