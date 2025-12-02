@@ -44,21 +44,20 @@ def load_quests(filename="data/quests.txt"):
     # - FileNotFoundError → raise MissingDataFileError
     # - Invalid format → raise InvalidDataFormatError
     # - Corrupted/unreadable data → raise CorruptedDataError
-    try:
-        with open(filename, "r") as f:
-            for line in f:
-                clean_lines = line.strip()
-                split_lines = clean_lines.split(":")
-                if clean_lines == f"{split_lines[0]}:{split_lines[1]}":
-                    continue
-                else:
-                    raise InvalidDataFormatError
-    except FileNotFoundError:
-        print("MissingDataFileError")
-    except CorruptedDataError:
-        print("File is corrupted and can not be used")
-    except InvalidDataFormatError:
-        print("File not in right format")
+    if os.path.exists(filename):
+        if os.path.isfile(full_file):
+            with open(filename, "r") as f:
+                for line in f:
+                    clean_lines = line.strip()
+                    split_lines = clean_lines.split(":")
+                    if clean_lines == f"{split_lines[0]}:{split_lines[1]}":
+                        continue
+                    else:
+                        raise InvalidDataFormatError
+        else:
+            raise CorruptedDataError
+    else:
+        raise MissingDataFileError
 
 def load_items(filename="data/items.txt"):
     """
@@ -77,22 +76,20 @@ def load_items(filename="data/items.txt"):
     """
     # TODO: Implement this function
     # Must handle same exceptions as load_quests
-    try:
-        with open(filename, "r") as f:
-            for line in f:
-                clean_lines = line.strip()
-                split_lines = clean_lines.split(":")
-                if clean_lines == f"{split_lines[0]}:{split_lines[1]}":
-                    continue
-                else:
-                    raise InvalidDataFormatError
-        return
-    except FileNotFoundError:
-        print("MissingDataFileError")
-    except CorruptedDataError:
-        print("File is corrupted and can not be used")
-    except InvalidDataFormatError:
-        print("File not in right format")
+    if os.path.exists(filename):
+        if os.path.isfile(full_file):
+            with open(filename, "r") as f:
+                for line in f:
+                    clean_lines = line.strip()
+                    split_lines = clean_lines.split(":")
+                    if clean_lines == f"{split_lines[0]}:{split_lines[1]}":
+                        continue
+                    else:
+                        raise InvalidDataFormatError
+        else:
+            raise CorruptedDataError
+    else:
+        raise MissingDataFileError
 
 
 def validate_quest_data(quest_dict):

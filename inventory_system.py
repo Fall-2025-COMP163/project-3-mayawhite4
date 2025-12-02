@@ -143,7 +143,7 @@ def use_item(character, item_id, item_data):
     # Apply effect to character
     # Remove item from inventory
     if item_id in character["inventory"]:
-        if "consumable" in character[item_data]:
+        if "consumable" in item_data:
             cleaned_line = character[item_data].strip()
             split_lines = cleaned_line.split(":")
             if split_lines[0] == "health":

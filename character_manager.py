@@ -60,6 +60,7 @@ def create_character(name, character_class):
         character["inventory"] = []
         character["active_quests"] = []
         character["completed_quests"] = []
+        return character
     elif (character_class == "Mage"):
         character["name"] = name
         character["class"] = character_class
@@ -73,6 +74,7 @@ def create_character(name, character_class):
         character["inventory"] = []
         character["active_quests"] = []
         character["completed_quests"] = []
+        return character
     elif (character_class == "Rogue"):
         character["name"] = name
         character["class"] = character_class
@@ -86,6 +88,7 @@ def create_character(name, character_class):
         character["inventory"] = []
         character["active_quests"] = []
         character["completed_quests"] = []
+        return character
     elif (character_class == "Cleric"):
         character["name"] = name
         character["class"] = character_class
@@ -99,6 +102,7 @@ def create_character(name, character_class):
         character["inventory"] = []
         character["active_quests"] = []
         character["completed_quests"] = []
+        return character
     else:
         raise InvalidCharacterClassError
 
@@ -159,17 +163,17 @@ def load_character(character_name, save_directory="data/save_games"):
     # Validate data format → InvalidSaveDataError
     # Parse comma-separated lists back into Python lists
     full_file = os.path.join(save_directory, character_name)
-    if file.os.exists(full_file):
+    if os.path.exists(full_file):
         if os.path.isfile(full_file):
             with open(full_file, "r") as file:
                 for line in file:
                     clean_lines = line.strip()
-                    split_lines = clean_lines.split(":")
-                    if clean_lines == f"{split_lines[0]}:{split_lines[1]}":
-                        continue
+                    split_lines = clean_lines.split(",")
+                    character_dict = {split_lines[0]: []}
+                    for line in range(len(split_lines)):
+                        character_dict[split_lines[0]].append(split_lines[line])
                     else:
                         raise InvalidSaveDataError
-                #Have to add the cs list into python list
         else:
             raise SaveFileCorruptedError()
     else:
