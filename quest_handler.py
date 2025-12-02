@@ -306,7 +306,7 @@ def display_quest_list(quest_list):
     Shows: Title, Required Level, Rewards
     """
     # TODO: Implement quest list display
-    print(f"Title: {quest_list[0]} | Required Lebel: {quest_list[1]} | Rewards: {quest_list[2]}")
+    print(f"Title: {quest_list[0]} | Required Level: {quest_list[1]} | Rewards: {quest_list[2]}")
 
 def display_character_quest_progress(character, quest_data_dict):
     """
