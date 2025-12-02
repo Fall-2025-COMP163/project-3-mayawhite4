@@ -50,14 +50,15 @@ def load_quests(filename="data/quests.txt"):
                 for line in f:
                     clean_lines = line.strip()
                     split_lines = clean_lines.split(":")
-                    if clean_lines == f"{split_lines[0]}:{split_lines[1]}":
-                        continue
+                    if len(split_lines) != 2:
+                        raise InvalidDataFormattError
                     else:
-                        raise InvalidDataFormatError
+                        quest_dict = {split_lines[0]: split_lines[1]}
         else:
             raise CorruptedDataError
     else:
         raise MissingDataFileError
+    return quest_dict
 
 def load_items(filename="data/items.txt"):
     """
@@ -82,15 +83,15 @@ def load_items(filename="data/items.txt"):
                 for line in f:
                     clean_lines = line.strip()
                     split_lines = clean_lines.split(":")
-                    if clean_lines == f"{split_lines[0]}:{split_lines[1]}":
-                        continue
+                    if len(split_lines) != 2:
+                        raise InvalidDataFormattError
                     else:
-                        raise InvalidDataFormatError
+                        item_dict = {split_lines[0]: split_lines[1]}
         else:
             raise CorruptedDataError
     else:
         raise MissingDataFileError
-
+    return item_dict
 
 def validate_quest_data(quest_dict):
     """
