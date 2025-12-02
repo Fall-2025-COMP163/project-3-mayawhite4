@@ -8,7 +8,7 @@ AI Usage: [Document any AI assistance used]
 
 This module handles inventory management, item usage, and equipment.
 """
-from charset_normalizer.cd import characters_popularity_compare
+#from charset_normalizer.cd import characters_popularity_compare
 #Do I need to keep this ^
 from custom_exceptions import (
     InventoryFullError,
@@ -302,7 +302,17 @@ def unequip_armor(character):
     Raises: InventoryFullError if inventory is full
     """
     # TODO: Implement armor unequipping
-    pass
+    if character["equipped_armor"] == " ":
+        return None
+    else:
+        if len(character["inventory"]) >= MAX_INVENTORY_SIZE:
+            raise InventoryFullError
+        else:
+            armor = character["equipped_armor"]
+            character["inventory"].append(character["equipped_armor"])
+            character["equipped_armor"] = " "
+
+            return armor
 
 # ============================================================================
 # SHOP SYSTEM
@@ -327,7 +337,15 @@ def purchase_item(character, item_id, item_data):
     # Check if inventory has space
     # Subtract gold from character
     # Add item to inventory
-    pass
+    if character["gold"] >= item_data["cost"]:
+        if len(character["inventory"]) < MAX_INVENTORY_SIZE:
+            character["gold"] -= item_data["cost"]
+            character["inventory"].append(item_id)
+            return True
+        else:
+            raise InventoryFullError
+    else:
+        raise InsufficientResourcesError
 
 def sell_item(character, item_id, item_data):
     """
@@ -346,10 +364,11 @@ def sell_item(character, item_id, item_data):
     # Calculate sell price (cost // 2)
     # Remove item from inventory
     # Add gold to character
-    if character[item_id] == character[item_id].keys():
-        price = character[item_data] // 2
-        del character[item_id]
-        character["gold"] = character["gold"] + price
+    if item_id in character["inventory"]:
+        price = item_data["cost"] // 2
+        character["inventory"].remove(item_id)
+        character["gold"] += price
+        return price
     else:
         raise ItemNotFoundError
 
@@ -411,7 +430,18 @@ def display_inventory(character, item_data_dict):
     # TODO: Implement inventory display
     # Count items (some may appear multiple times)
     # Display with item names from item_data_dict
-    pass
+    check_for_doubles = []
+    for items in character["inventory"]:
+        check_for_doubles.append(items)
+
+    for checks in check_for_doubles:
+        count = 0
+        for line in check_for_doubles:
+            if line == checks:
+                count += 1
+        cleaned_lines = item_data_dict[checks].strip()
+        split_lines = cleaned_lines.split(":")
+        print(f"Name: {split_lines[0]} | Type: {split_lines[1]} | Quantity: {count}")
 
 # ============================================================================
 # TESTING
