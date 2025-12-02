@@ -51,7 +51,7 @@ def load_quests(filename="data/quests.txt"):
                     clean_lines = line.strip()
                     split_lines = clean_lines.split(":")
                     if len(split_lines) != 2:
-                        raise InvalidDataFormattError
+                        raise InvalidDataFormatError
                     else:
                         quest_dict = {split_lines[0]: split_lines[1]}
         else:

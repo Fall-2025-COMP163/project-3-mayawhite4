@@ -53,13 +53,13 @@ def accept_quest(character, quest_id, quest_data_dict):
     if quest_id in quest_data_dict:
         if character["level"] >= quest_data_dict[quest_id]["required_level"]:
             if quest_data_dict[quest_id]["prerequisite"] == "NONE":
-                if quest_id not in character["completed_quest"]:
+                if quest_id not in character["completed_quests"]:
                     if quest_id not in character["active_quests"]:
                         character["active_quests"].append(quest_data_dict[quest_id])
                 else:
                     raise QuestAlreadyCompletedError
-            elif quest_data_dict[quest_id]["prerequisite"] in character["completed_quest"]:
-                if quest_id not in character["completed_quest"]:
+            elif quest_data_dict[quest_id]["prerequisite"] in character["completed_quests"]:
+                if quest_id not in character["completed_quests"]:
                     if quest_id not in character["active_quests"]:
                         character["active_quests"].append(quest_data_dict[quest_id])
                 else:
