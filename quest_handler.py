@@ -8,7 +8,7 @@ AI Usage: [Document any AI assistance used]
 
 This module handles quest management, dependencies, and completion.
 """
-
+import character_manager
 from custom_exceptions import (
     QuestNotFoundError,
     QuestRequirementsNotMetError,
@@ -50,7 +50,27 @@ def accept_quest(character, quest_id, quest_data_dict):
     # Check not already completed
     # Check not already active
     # Add to character['active_quests']
-    pass
+    if quest_id in quest_data_dict:
+        if character["level"] >= quest_data_dict[quest_id]["level"]:
+            if quest_data_dict[quest_id]["prerequisites"] == "NONE":
+                if quest_data_dict[quest_id]["name"] not in character["quest_completed"]:
+                    if quest_data_dict[quest_id]["name"] not in character["active_quests"]:
+                        character["active_quests"].append(quest_data_dict[quest_id])
+                else:
+                    raise QuestAlreadyCompletedError
+            elif quest_data_dict[quest_id]["prerequisites"] in character["quest_completed"]:
+                if quest_data_dict[quest_id]["name"] not in character["quest_completed"]:
+                    if quest_data_dict[quest_id]["name"] not in character["active_quests"]:
+                        character["active_quests"].append(quest_data_dict[quest_id])
+                else:
+                    raise QuestAlreadyCompletedError
+            else:
+                raise QuestRequirementsNotMetError
+        else:
+            raise InsufficientLevelError
+        return True
+    else:
+        raise QuestNotFoundError
 
 def complete_quest(character, quest_id, quest_data_dict):
     """
@@ -77,7 +97,18 @@ def complete_quest(character, quest_id, quest_data_dict):
     # Add to completed_quests
     # Grant rewards (use character_manager.gain_experience and add_gold)
     # Return reward summary
-    pass
+    if quest_id in quest_data_dict:
+        if quest_id in character["active_quests"]:
+            character["active_quests"].remove(quest_id)
+            character["completed_quests"].append(quest_id)
+            character_manager.gain_experience(character, quest_data_dict[quest_id]["xp_amount"])
+            character_manager.add_gold(character, quest_data_dict[quest_id]["gold"])
+            reward_summary = {"xp_amount": quest_data_dict[quest_id]["xp_amount"], "gold": quest_data_dict[quest_id]["gold"]}
+            return reward_summary
+        else:
+            raise QuestNotActiveError
+    else:
+        raise QuestNotFoundError
 
 def abandon_quest(character, quest_id):
     """
@@ -132,7 +163,14 @@ def get_available_quests(character, quest_data_dict):
     """
     # TODO: Implement available quest search
     # Filter all quests by requirements
-    pass
+    can_do_quest = []
+    for quests in quest_data_dict:
+        if character["level"] >= quests["level"]:
+            if quests["prerequisites"] in character["completed_quests"]:
+                if (quests not in character["completed_quests"]) and (quests not in character["active_quests"]):
+                    can_do_quest.append(quests)
+    return can_do_quest
+
 
 # ============================================================================
 # QUEST TRACKING
@@ -141,7 +179,7 @@ def get_available_quests(character, quest_data_dict):
 def is_quest_completed(character, quest_id):
     """
     Check if a specific quest has been completed
-    
+
     Returns: True if completed, False otherwise
     """
     # TODO: Implement completion check
@@ -153,7 +191,7 @@ def is_quest_completed(character, quest_id):
 def is_quest_active(character, quest_id):
     """
     Check if a specific quest is currently active
-    
+
     Returns: True if active, False otherwise
     """
     # TODO: Implement active check
@@ -171,7 +209,13 @@ def can_accept_quest(character, quest_id, quest_data_dict):
     """
     # TODO: Implement requirement checking
     # Check all requirements without raising exceptions
-    pass
+    quest_dict = quest_data_dict[quest_id]
+    if character["level"] >= quest_dict["level"]:
+        if quest_dict["prerequisites"] in character["completed_quests"]:
+            if (quest_dict not in character["completed_quests"]) and (quest_dict not in character["active_quests"]):
+                return True
+    else:
+        return False
 
 def get_quest_prerequisite_chain(quest_id, quest_data_dict):
     """
@@ -186,7 +230,10 @@ def get_quest_prerequisite_chain(quest_id, quest_data_dict):
     # TODO: Implement prerequisite chain tracing
     # Follow prerequisite links backwards
     # Build list in reverse order
-    pass
+    quest_prerequisites = []
+    for quest in range(len(quest_data_dict[quest_id]["prerequisites"])):
+        quest_prerequisites.append(quest_data_dict[quest_id]["prerequisites"][-1])
+    return quest_prerequisites
 
 # ============================================================================
 # QUEST STATISTICS
@@ -202,7 +249,10 @@ def get_quest_completion_percentage(character, quest_data_dict):
     # total_quests = len(quest_data_dict)
     # completed_quests = len(character['completed_quests'])
     # percentage = (completed / total) * 100
-    pass
+    total_quests = len(quest_data_dict)
+    completed_quests = len(character["completed_quests"])
+    percentage = (completed_quests / total_quests) * 100
+    return percentage
 
 def get_total_quest_rewards_earned(character, quest_data_dict):
     """
@@ -212,7 +262,12 @@ def get_total_quest_rewards_earned(character, quest_data_dict):
     """
     # TODO: Implement reward calculation
     # Sum up reward_xp and reward_gold for all completed quests
-    pass
+    total_xp = 0
+    total_gold = 0
+    for quest in character["completed_quests"]:
+        total_xp += quest_data_dict[quest]["xp_amount"]
+        total_gold += quest_data_dict[quest]["gold"]
+    return {"total_xp": total_xp, "total_gold": total_gold}
 
 def get_quests_by_level(quest_data_dict, min_level, max_level):
     """
@@ -221,7 +276,11 @@ def get_quests_by_level(quest_data_dict, min_level, max_level):
     Returns: List of quest dictionaries
     """
     # TODO: Implement level filtering
-    pass
+    quest_list = []
+    for quest in quest_data_dict:
+        if min_level <= quest["level"] <= max_level:
+            quest_list.append(quest)
+    return quest_list
 
 # ============================================================================
 # DISPLAY FUNCTIONS
@@ -237,7 +296,8 @@ def display_quest_info(quest_data):
     print(f"\n=== {quest_data['title']} ===")
     print(f"Description: {quest_data['description']}")
     # ... etc
-    pass
+    print(f"Rewards: {quest_data["rewards"]}")
+    print(f"Requirements: {quest_data["requirements"]}")
 
 def display_quest_list(quest_list):
     """
@@ -281,7 +341,15 @@ def validate_quest_prerequisites(quest_data_dict):
     # TODO: Implement prerequisite validation
     # Check each quest's prerequisite
     # Ensure prerequisite exists in quest_data_dict
-    pass
+    for quest in quest_data_dict:
+        for prerequisites in quest_data_dict[quest]["prerequisites"]:
+            if prerequisites == "NONE":
+                continue
+            elif prerequisites in quest_data_dict:
+                continue
+            else:
+                raise QuestNotFoundError
+    return True
 
 
 # ============================================================================
