@@ -136,6 +136,7 @@ def save_character(character, save_directory="data/save_games"):
     # Lists should be saved as comma-separated values
     filename = character["name"] + "_save.txt"
     full_path = os.path.join(save_directory, filename)
+    successful = False
     try:
         if os.path.isdir(save_directory):
             filename = character["name"] + "_save.txt"
@@ -143,8 +144,12 @@ def save_character(character, save_directory="data/save_games"):
                 full_path = os.path.join(save_directory, filename)
         else:
             os.makedirs(save_directory)
-        if os.path.isfile(full_path):
-            return True
+            filename = character["name"] + "_save.txt"
+            with open(filename, "r") as f:
+                full_path = os.path.join(save_directory, filename)
+        if os.path.exists(full_path):
+            successful = True
+        return successful
     except IOError:
         print("ERROR ERROR")
     except PermissionError:

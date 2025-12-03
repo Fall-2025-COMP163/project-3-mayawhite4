@@ -103,7 +103,7 @@ def complete_quest(character, quest_id, quest_data_dict):
             character["completed_quests"].append(quest_id)
             character_manager.gain_experience(character, quest_data_dict[quest_id]["xp_amount"])
             character_manager.add_gold(character, quest_data_dict[quest_id]["gold"])
-            reward_summary = {"xp_amount": quest_data_dict[quest_id]["xp_amount"], "gold": quest_data_dict[quest_id]["gold"]}
+            reward_summary = {"xp_amount": quest_data_dict[quest_id]["reward_xp"], "gold": quest_data_dict[quest_id]["reward_gold"]}
             return reward_summary
         else:
             raise QuestNotActiveError
