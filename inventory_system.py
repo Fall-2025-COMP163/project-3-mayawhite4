@@ -213,7 +213,7 @@ def equip_weapon(character, item_id, item_data):
                 perk = int(split_lines[1])
                 character["max_health"] = character["max_health"] + perk
             print(f"The weapon you are now equipped with is {item_id}")
-            character["inventory"].pop(item_id)
+            character["inventory"].remove(item_id)
         else:
             raise InvalidItemTypeError
     else:
