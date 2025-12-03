@@ -81,7 +81,7 @@ def load_items(filename="data/items.txt"):
     # Must handle same exceptions as load_quests
     item_dict = {}
     if os.path.exists(filename):
-        if os.path.isfile(full_file):
+        if os.path.isfile(filename):
             with open(filename, "r") as f:
                 for line in f:
                     clean_lines = line.strip()
@@ -155,10 +155,26 @@ def validate_item_data(item_dict):
     Raises: InvalidDataFormatError if missing required fields or invalid type
     """
     # TODO: Implement validation
-    count = 0
+    key_list = []
     for key in item_dict.keys():
-        if key == item_dict.keys()[count]:
-            count += 1
+        key_list.append(key)
+
+    for keys in key_list:
+        if keys == "item_id":
+            continue
+        elif keys == "name":
+            continue
+        elif keys == "type":
+            if (item_dict["type"] != "weapon") or (item_dict["type"] != "armor") or (item_dict["type"] != "consumable"):
+                raise InvalidDataFormatError
+        elif keys == "effect":
+            continue
+        elif keys == "cost":
+            if isinstance(quest_dict[keys], int):
+                continue
+            else:
+                quest_dict[keys] = int(quest_dict[keys])
+        elif keys == "description":
             continue
         else:
             raise InvalidDataFormatError

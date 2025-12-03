@@ -149,12 +149,12 @@ def save_character(character, save_directory="data/save_games"):
                 full_path = os.path.join(save_directory, filename)
         if os.path.exists(full_path):
             successful = True
-        return successful
     except IOError:
         print("ERROR ERROR")
     except PermissionError:
         print("No permission")
-    #Come back please the the this line
+    finally:
+        return successful
 
 
 def load_character(character_name, save_directory="data/save_games"):
