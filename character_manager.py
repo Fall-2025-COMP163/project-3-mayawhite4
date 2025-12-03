@@ -137,10 +137,12 @@ def save_character(character, save_directory="data/save_games"):
     try:
         if os.path.isdir(save_directory):
             filename = character["NAME"] + "_save.txt"
+            with open(filename, "r") as f:
             full_path = os.path.join(save_directory, filename)
         else:
             os.makedirs(save_directory)
-        return True
+        if os.path.isfile(full_path):
+            return True
     except IOError:
         print("ERROR ERROR")
     except PermissionError:
