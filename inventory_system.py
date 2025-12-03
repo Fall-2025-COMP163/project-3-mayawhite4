@@ -149,15 +149,15 @@ def use_item(character, item_id, item_data):
             if split_lines[0] == "health":
                 bonus = int(split_lines[1])
                 character["health"] = character["health"] + bonus
-                print(f"You have used {character["inventory"][item_id]} a health boost.")
+                print(f"You have used {item_id} a health boost.")
             if split_lines[0] == "strength":
                 bonus = int(split_lines[1])
                 character["strength"] = character["strength"] + bonus
-                print(f"You have used {character["inventory"][item_id]} a strength boost.")
+                print(f"You have used {item_id} a strength boost.")
             if split_lines[0] == "magic":
                 bonus = int(split_lines[1])
                 character["magic"] = character["magic"] + bonus
-                print(f"You have used {character["inventory"][item_id]} a magic boost.")
+                print(f"You have used {item_id} a magic boost.")
             character["inventory"].pop(item_id)
         else:
             raise InvalidItemTypeError
