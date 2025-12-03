@@ -158,7 +158,7 @@ def use_item(character, item_id, item_data):
                 bonus = int(split_lines[1])
                 character["magic"] = character["magic"] + bonus
                 print(f"You have used {item_id} a magic boost.")
-            character["inventory"].pop(item_id)
+            character["inventory"].remove(item_id)
         else:
             raise InvalidItemTypeError
     else:
