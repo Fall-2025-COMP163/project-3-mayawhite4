@@ -143,8 +143,8 @@ def use_item(character, item_id, item_data):
     # Apply effect to character
     # Remove item from inventory
     if item_id in character["inventory"]:
-        if "consumable" in item_data:
-            cleaned_line = character[item_data].strip()
+        if "consumable" == item_data["type"]:
+            cleaned_line = item_data["effect"].strip()
             split_lines = cleaned_line.split(":")
             if split_lines[0] == "health":
                 bonus = int(split_lines[1])
@@ -191,27 +191,27 @@ def equip_weapon(character, item_id, item_data):
     # Store equipped_weapon in character dictionary
     # Remove item from inventory
     if item_id in character["inventory"]:
-        if "weapon" in item_data:
+        if "weapon" == item_data["type"]:
             if character["equipped_weapon"] == " ":
                 character["equipped_weapon"] = item_id
             else:
                 character["equipped_weapon"] == " "
                 character["equipped_weapon"] == item_id
-            for bonus in item_data:
-                cleaned_line = item_data[bonus].strip()
-                split_lines = cleaned_line.split(":")
-                if split_lines[0] == "strength":
-                    perk = int(split_lines[1])
-                    character["strength"] = character["strength"] + perk
-                if split_lines[0] == "magic":
-                    perk = int(split_lines[1])
-                    character["magic"] = character["magic"] + perk
-                if split_lines[0] == "health":
-                    perk = int(split_lines[1])
-                    character["health"] = character["health"] + perk
-                if split_lines[0] == "max_health":
-                    perk = int(split_lines[1])
-                    character["max_health"] = character["max_health"] + perk
+
+            cleaned_line = item_data["effect"].strip()
+            split_lines = cleaned_line.split(":")
+            if split_lines[0] == "strength":
+                perk = int(split_lines[1])
+                character["strength"] = character["strength"] + perk
+            if split_lines[0] == "magic":
+                perk = int(split_lines[1])
+                character["magic"] = character["magic"] + perk
+            if split_lines[0] == "health":
+                perk = int(split_lines[1])
+                character["health"] = character["health"] + perk
+            if split_lines[0] == "max_health":
+                perk = int(split_lines[1])
+                character["max_health"] = character["max_health"] + perk
             print(f"The weapon you are now equipped with is {item_id}")
             character["inventory"].pop(item_id)
         else:

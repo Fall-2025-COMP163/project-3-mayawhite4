@@ -135,7 +135,12 @@ def save_character(character, save_directory="data/save_games"):
     # Handle any file I/O errors appropriately
     # Lists should be saved as comma-separated values
     try:
-        open(os.path.join(save_directory, character), "w")
+        if os.path.isdir(save_directory):
+            filename = character["NAME"] + "_save.txt"
+            full_path = os.path.join(save_directory, filename)
+        else:
+            os.makedirs(save_directory)
+        return True
     except IOError:
         print("ERROR ERROR")
     except PermissionError:

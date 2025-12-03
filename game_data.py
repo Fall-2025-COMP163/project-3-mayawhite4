@@ -44,6 +44,7 @@ def load_quests(filename="data/quests.txt"):
     # - FileNotFoundError → raise MissingDataFileError
     # - Invalid format → raise InvalidDataFormatError
     # - Corrupted/unreadable data → raise CorruptedDataError
+    quest_dict = {}
     if os.path.exists(filename):
         if os.path.isfile(filename):
             with open(filename, "r") as f:
@@ -53,7 +54,8 @@ def load_quests(filename="data/quests.txt"):
                     if len(split_lines) != 2:
                         raise InvalidDataFormatError
                     else:
-                        quest_dict = {split_lines[0]: split_lines[1]}
+                        if split_lines[0] == "QUEST_ID":
+                            quest_dict = {"QUEST_ID": split_lines[1]}
         else:
             raise CorruptedDataError
     else:
@@ -77,6 +79,7 @@ def load_items(filename="data/items.txt"):
     """
     # TODO: Implement this function
     # Must handle same exceptions as load_quests
+    item_dict = {}
     if os.path.exists(filename):
         if os.path.isfile(full_file):
             with open(filename, "r") as f:
@@ -86,7 +89,8 @@ def load_items(filename="data/items.txt"):
                     if len(split_lines) != 2:
                         raise InvalidDataFormattError
                     else:
-                        item_dict = {split_lines[0]: split_lines[1]}
+                        if split_lines[0] == "QUEST_ID":
+                            item_dict = {"QUEST_ID": split_lines[1]}
         else:
             raise CorruptedDataError
     else:
@@ -106,10 +110,34 @@ def validate_quest_data(quest_dict):
     # TODO: Implement validation
     # Check that all required keys exist
     # Check that numeric values are actually numbers
-    count = 0
+
+    key_list = []
     for key in quest_dict.keys():
-        if key == quest_dict.keys()[count]:
-            count += 1
+        key_list.append(key)
+
+    for keys in key_list:
+        if keys == "quest_id":
+            continue
+        elif keys == "title":
+            continue
+        elif keys == "description":
+            continue
+        elif keys == "reward_xp":
+            if isinstance(quest_dict[keys], int):
+                continue
+            else:
+                quest_dict[keys] = int(quest_dict[keys])
+        elif keys == "reward_gold":
+            if isinstance(quest_dict[keys], int):
+                continue
+            else:
+                quest_dict[keys] = int(quest_dict[keys])
+        elif keys == "required_level":
+            if isinstance(quest_dict[keys], int):
+                continue
+            else:
+                quest_dict[keys] = int(quest_dict[keys])
+        elif keys == "prerequisite":
             continue
         else:
             raise InvalidDataFormatError

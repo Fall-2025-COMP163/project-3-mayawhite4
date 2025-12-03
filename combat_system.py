@@ -59,11 +59,11 @@ def get_random_enemy_for_level(character_level):
     # Use if/elif/else to select enemy type
     # Call create_enemy with appropriate type
     if character_level >= 6:
-        return create_enemy("Dragon")
+        return create_enemy("dragon")
     elif character_level >= 3:
-        return create_enemy("Orcs")
+        return create_enemy("orcs")
     else:
-        return create_enemy("Goblins")
+        return create_enemy("goblins")
 
 # ====================="=======================================================
 # COMBAT SYSTEM
@@ -314,7 +314,7 @@ def get_victory_rewards(enemy):
     Returns: Dictionary with 'xp' and 'gold'
     """
     # TODO: Implement reward calculation
-    rewards = {"xp": enemy["xp_rewards"],"gold": enemy["gold_rewards"]}
+    rewards = {"xp": enemy["xp_reward"],"gold": enemy["gold_reward"]}
     return rewards
 
 def display_combat_stats(character, enemy):
