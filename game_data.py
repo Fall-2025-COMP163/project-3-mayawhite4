@@ -87,7 +87,7 @@ def load_items(filename="data/items.txt"):
                     clean_lines = line.strip()
                     split_lines = clean_lines.split(":")
                     if len(split_lines) != 2:
-                        raise InvalidDataFormattError
+                        raise InvalidDataFormatError
                     else:
                         if split_lines[0] == "QUEST_ID":
                             item_dict = {"QUEST_ID": split_lines[1]}
@@ -165,7 +165,13 @@ def validate_item_data(item_dict):
         elif keys == "name":
             continue
         elif keys == "type":
-            if (item_dict["type"] != "weapon") or (item_dict["type"] != "armor") or (item_dict["type"] != "consumable"):
+            if item_dict["type"] == "weapon":
+                continue
+            elif item_dict["type"] == "armor":
+                continue
+            elif item_dict["type"] == "consumable":
+                continue
+            else:
                 raise InvalidDataFormatError
         elif keys == "effect":
             continue

@@ -36,11 +36,11 @@ def create_enemy(enemy_type):
     # TODO: Implement enemy creation
     # Return dictionary with: name, health, max_health, strength, magic, xp_reward, gold_reward
     if enemy_type == "goblin":
-        enemy_dict = {"health": 50, "strength": 10, "magic":2, "xp_reward": 15, "gold_reward": 50}
+        enemy_dict = {"name": "goblin", "health": 50, "strength": 10, "magic":2, "xp_reward": 15, "gold_reward": 50}
     elif enemy_type == "orc":
-        enemy_dict = {"health": 100, "strength": 25, "magic": 10, "xp_reward": 50, "gold_reward": 250}
+        enemy_dict = {"name": "orc", "health": 100, "strength": 25, "magic": 10, "xp_reward": 50, "gold_reward": 250}
     elif enemy_type == "dragon":
-        enemy_dict = {"health": 200, "strength": 50, "magic": 75, "xp_reward": 200, "gold_reward": 200}
+        enemy_dict = {"name": "dragon", "health": 200, "strength": 50, "magic": 75, "xp_reward": 200, "gold_reward": 200}
     else:
         raise InvalidTargetError
     return enemy_dict

@@ -190,6 +190,7 @@ def equip_weapon(character, item_id, item_data):
     # Parse effect and apply to character stats
     # Store equipped_weapon in character dictionary
     # Remove item from inventory
+    character["equipped_weapon"] = " "
     if item_id in character["inventory"]:
         if "weapon" == item_data["type"]:
             if character["equipped_weapon"] == " ":
@@ -241,6 +242,7 @@ def equip_armor(character, item_id, item_data):
     """
     # TODO: Implement armor equipping
     # Similar to equip_weapon but for armor
+    character["equipped_armor"] = " "
     if item_id in character["inventory"]:
         if "armor" in item_data:
             if character["equipped_armor"] == " ":
